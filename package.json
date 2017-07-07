@@ -5,7 +5,8 @@
   "cordova": {
     "id": "io.gvox.plugin.phonecalltrap",
     "platforms": [
-      "android"
+      "android",
+      "browser"
     ]
   },
   "repository": {

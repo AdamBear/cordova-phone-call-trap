@@ -27,4 +27,10 @@
 
         <source-file src="src/android/PhoneCallTrap.java" target-dir="src/io/gvox/phonecalltrap" />
      </platform>
+
+    <platform name="browser">
+        <js-module src="src/browser/PhoneCallTrap.js" name="PhoneCallTrap_browser">
+            <clobbers target="window.PhoneCallTrap" />
+        </js-module>
+    </platform>
 </plugin>
