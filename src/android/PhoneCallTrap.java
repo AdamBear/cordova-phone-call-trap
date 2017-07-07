@@ -1,13 +1,8 @@
 package io.gvox.phonecalltrap;
 
-import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.widget.Toast;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
@@ -53,16 +48,16 @@ class CallStateListener extends PhoneStateListener {
 
         switch (state) {
             case TelephonyManager.CALL_STATE_IDLE:
-            msg = "IDLE";
-            break;
+                msg = "IDLE";
+                break;
 
             case TelephonyManager.CALL_STATE_OFFHOOK:
-            msg = "OFFHOOK";
-            break;
+                msg = "OFFHOOK";
+                break;
 
             case TelephonyManager.CALL_STATE_RINGING:
-            msg = "RINGING";
-            break;
+                msg = "RINGING";
+                break;
         }
 
         JSONObject r = new JSONObject();
@@ -74,44 +69,4 @@ class CallStateListener extends PhoneStateListener {
 
         callbackContext.sendPluginResult(result);
     }
-
- class OutgoingReceiver extends BroadcastReceiver {
- 	public OutgoingReceiver() {}
-
- 	@Override
- 	public void onReceive(Context context, Intent intent) {
- 		String number = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
-
- 		Toast.makeText(ctx, "Outgoing: "+number, Toast.LENGTH_LONG).show();
- 	}
- }
-
-
- class CallDetectService extends Service {
- 	private CallHelper callHelper;
-
- 	public CallDetectService() {}
-
- 	@Override
- 	public int onStartCommand(Intent intent, int flags, int startId) {
- 		callHelper = new CallHelper(this);
- 		int res = super.onStartCommand(intent, flags, startId);
-
- 		callHelper.start();
-
- 		return res;
- 	}
-
- 	@Override
- 	public void onDestroy() {
- 		super.onDestroy();
- 		callHelper.stop();
- 	}
-
- 	@Override
- 	public IBinder onBind(Intent intent) {
- 		// not supporting binding
- 		return null;
- 	}
- }
 }
