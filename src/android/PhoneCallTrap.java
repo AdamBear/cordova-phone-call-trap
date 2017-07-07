@@ -8,6 +8,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class PhoneCallTrap extends CordovaPlugin {
@@ -61,8 +62,12 @@ class CallStateListener extends PhoneStateListener {
         }
 
         JSONObject r = new JSONObject();
-        r.put("state", msg);
-        r.put("incomingNumber", incomingNumber);
+        try {
+            r.put("state", msg);
+            r.put("incomingNumber", incomingNumber);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         PluginResult result = new PluginResult(PluginResult.Status.OK, r);
         result.setKeepCallback(true);
