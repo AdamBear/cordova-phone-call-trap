@@ -35,6 +35,8 @@ public class PhoneCallTrap extends CordovaPlugin {
 class CallStateListener extends PhoneStateListener {
 
     private CallbackContext callbackContext;
+    private iscall = false;
+    MediaRecorder mediaRecorder = new MediaRecorder();
 
     public void setCallbackContext(CallbackContext callbackContext) {
         this.callbackContext = callbackContext;
@@ -50,10 +52,23 @@ class CallStateListener extends PhoneStateListener {
         switch (state) {
             case TelephonyManager.CALL_STATE_IDLE:
                 msg = "IDLE";
+                if(iscall){
+                    mediaRecorder.stop();
+                    iscall=false;
+                }
                 break;
 
             case TelephonyManager.CALL_STATE_OFFHOOK:
                 msg = "OFFHOOK";
+                iscall = true;
+                try {
+                    recordCallComment();
+
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    mediaRecorder.stop();
+                }
                 break;
 
             case TelephonyManager.CALL_STATE_RINGING:
@@ -73,5 +88,19 @@ class CallStateListener extends PhoneStateListener {
         result.setKeepCallback(true);
 
         callbackContext.sendPluginResult(result);
+    }
+
+    public void recordCallComment() throws IOException{
+        //这里AudioSource.MIC可以改为AudioSource.VOICE_CALL, 把音源变
+        //电话通话内容, 但似乎很多机都不支持通话录音
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder
+                .setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+        mediaRecorder
+                .setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+        audioFile = File.createTempFile("record_", ".amr");
+        mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
+        mediaRecorder.prepare();
+        mediaRecorder.start();
     }
 }
