@@ -35,7 +35,7 @@ public class PhoneCallTrap extends CordovaPlugin {
 class CallStateListener extends PhoneStateListener {
 
     private CallbackContext callbackContext;
-    private iscall = false;
+    private Boolean iscall = false;
     MediaRecorder mediaRecorder = new MediaRecorder();
 
     public void setCallbackContext(CallbackContext callbackContext) {
